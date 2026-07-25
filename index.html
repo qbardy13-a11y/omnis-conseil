@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omnis Conseil — Transformation numérique & IA</title>
+<meta name="description" content="Omnis Conseil accompagne votre transformation numérique et déploie l'intelligence artificielle au service de votre croissance. Découvrez Flair, notre agent IA de prospection B2B.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="data:image/png;base64,LOGO">
+<style>
+  :root{
+    --bg:#f3f8f1;
+    --bg-soft:#e9f1e5;
+    --surface:#ffffff;
+    --surface-2:#eef3ea;
+    --line: rgba(10,20,10,0.1);
+    --text:#10180f;
+    --text-dim:#4d5c4e;
+    --text-dimmer:#7c8b7c;
+    --ink:#0e1712;
+    --violet:#16834a;
+    --violet-2:#0f6b3c;
+    --cyan:#2f9d63;
+    --pink:#a9d86e;
+    --grad-main: linear-gradient(120deg, #0d5c34 0%, #16834a 50%, #2f9d63 100%);
+    --grad-flair: linear-gradient(135deg, #16834a 0%, #3fae72 100%);
+    --shadow-sm: rgba(16,24,17,.08);
+    --shadow-md: rgba(16,24,17,.14);
+    --shadow-lg: rgba(16,24,17,.20);
+    --radius: 18px;
+    --ease: cubic-bezier(.16,1,.3,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:default;
+  }
+  ::selection{background:var(--violet);color:#fff;}
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 32px;}
+  section{position:relative;z-index:2;}
+  img{max-width:100%;}
+
+  /* ================= PRELOADER ================= */
+  #preloader{
+    position:fixed;inset:0;z-index:9999;background:#070d0d;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  }
+  #preloader img{height:52px;width:auto;opacity:.95;}
+  .preloader-bar{width:220px;height:2px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;}
+  .preloader-fill{width:0%;height:100%;background:var(--grad-main);}
+  .preloader-pct{font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.1em;}
+
+  /* ================= BACKGROUND CANVAS ================= */
+  #bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(22,131,74,0.10), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 10%, rgba(63,174,114,0.08), transparent 60%),
+      var(--bg);
+  }
+
+  #scroll-progress{position:fixed;top:0;left:0;height:3px;background:var(--grad-main);z-index:1000;width:0%;box-shadow:0 0 12px rgba(22,131,74,.8);}
+
+  #cursor-glow{position:fixed;width:420px;height:420px;border-radius:50%;
+    background:radial-gradient(circle, rgba(22,131,74,0.10), transparent 70%);
+    pointer-events:none;z-index:6;transform:translate(-50%,-50%);left:-500px;top:-500px;will-change:transform;}
+  #cursor-ring{position:fixed;width:26px;height:26px;border:1.5px solid rgba(22,131,74,.55);border-radius:50%;
+    pointer-events:none;z-index:1001;transform:translate(-50%,-50%);left:-500px;top:-500px;
+    transition:width .3s var(--ease), height .3s var(--ease), background .3s var(--ease), border-color .3s, opacity .3s;}
+  #cursor-ring.ring-hover{width:52px;height:52px;background:rgba(22,131,74,.08);border-color:var(--violet);}
+  @media (max-width:900px){ #cursor-glow, #cursor-ring{display:none;} }
+
+  /* ================= NAV ================= */
+  header{position:fixed;top:0;left:0;right:0;z-index:100;padding:22px 0;transition:all .4s var(--ease);border-bottom:1px solid transparent;}
+  header.scrolled{padding:14px 0;background:rgba(255,255,255,0.78);backdrop-filter:blur(16px) saturate(160%);border-bottom:1px solid var(--line);}
+  nav.wrap{display:flex;align-items:center;justify-content:space-between;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-word{font-family:'Poppins',sans-serif;font-weight:700;font-size:21px;color:var(--ink);letter-spacing:-0.01em;line-height:1;transition:color .3s;}
+  .logo-dot{color:var(--violet);}
+  .logo:hover .logo-word{color:var(--violet);}
+
+  .nav-links{display:flex;align-items:center;gap:6px;}
+  .nav-links a{padding:9px 16px;border-radius:999px;font-size:14.5px;font-weight:500;color:var(--text-dim);transition:all .25s var(--ease);position:relative;}
+  .nav-links a:hover{color:var(--text);background:rgba(16,24,17,.05);}
+  .nav-flair{display:flex;align-items:center;gap:6px;background:var(--grad-flair)!important;color:#04140b!important;font-weight:700!important;
+    box-shadow:0 0 0 1px rgba(255,255,255,.15) inset, 0 4px 18px rgba(169,216,110,.25);animation:flairBreathe 3.2s ease-in-out infinite;}
+  .nav-flair svg{width:13px;height:13px;}
+  @keyframes flairBreathe{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.15) inset, 0 4px 18px rgba(169,216,110,.25);}50%{box-shadow:0 0 0 1px rgba(255,255,255,.25) inset, 0 4px 28px rgba(22,131,74,.55);}}
+  .nav-cta{padding:10px 20px;border-radius:999px;font-weight:600;font-size:14px;background:var(--ink);color:#fff;}
+  .nav-right{display:flex;align-items:center;gap:18px;}
+  .menu-toggle{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
+
+  @media(max-width:920px){
+    .nav-links{position:fixed;top:70px;left:16px;right:16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+      flex-direction:column;align-items:stretch;padding:14px;gap:4px;transform:translateY(-12px);opacity:0;pointer-events:none;transition:all .3s var(--ease);}
+    .nav-links.open{transform:translateY(0);opacity:1;pointer-events:auto;}
+    .nav-links a{width:100%;text-align:left;}
+    .menu-toggle{display:block;}
+    .nav-cta{display:none;}
+  }
+
+  /* ================= REVEAL ================= */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease), transform .9s var(--ease);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .reveal-scale{opacity:0;transform:scale(.94);transition:opacity 1s var(--ease), transform 1s var(--ease);}
+  .reveal-scale.in{opacity:1;transform:scale(1);}
+  .stagger > *{transition-delay:calc(var(--i,0) * 90ms);}
+
+  /* ================= HERO ================= */
+  #hero{min-height:100vh;display:flex;align-items:center;padding:150px 0 100px;position:relative;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--line);
+    background:rgba(22,131,74,.1);font-size:12.5px;font-weight:600;letter-spacing:.06em;color:var(--violet-2);text-transform:uppercase;margin-bottom:26px;}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:dotBlink 1.6s ease-in-out infinite;}
+  @keyframes dotBlink{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+  h1.hero-title{font-size:clamp(38px, 6vw, 78px);line-height:1.04;font-weight:700;max-width:920px;}
+  h1.hero-title .word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:4px;}
+  h1.hero-title .word span{display:inline-block;}
+  .grad-text{background:var(--grad-main);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:gradShift 6s linear infinite;}
+  @keyframes gradShift{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
+
+  .hero-sub{max-width:560px;color:var(--text-dim);font-size:18px;line-height:1.65;margin:26px 0 40px;}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{padding:15px 26px;border-radius:12px;font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;position:relative;overflow:hidden;}
+  .btn-primary{background:var(--ink);color:#fff;}
+  .btn-flair{background:var(--grad-flair);color:#04140b;box-shadow:0 6px 24px rgba(169,216,110,.28);}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);}
+  .btn svg{width:16px;height:16px;}
+
+  .hero-visual{position:absolute;right:-2%;top:50%;transform:translateY(-50%);width:44%;max-width:600px;height:520px;pointer-events:none;}
+  @media(max-width:1100px){.hero-visual{display:none;}}
+  .hero-visual-inner{position:relative;width:100%;height:100%;}
+  .float-chip{
+    position:absolute;display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);
+    border-radius:14px;padding:12px 16px;font-size:13.5px;font-weight:600;box-shadow:0 14px 34px var(--shadow-md);
+    animation:chipFloat 5s ease-in-out infinite;
+  }
+  .float-chip .fc-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);flex-shrink:0;}
+  .float-chip .fc-text{display:inline-block;transition:opacity .3s var(--ease);}
+  .float-chip.c1{top:6%;left:2%;animation-delay:0s;}
+  .float-chip.c2{top:46%;right:0%;animation-delay:1.4s;}
+  .float-chip.c3{bottom:10%;left:14%;animation-delay:2.8s;}
+  @keyframes chipFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+
+  .scroll-cue{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;
+    color:var(--text-dimmer);font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
+  .scroll-cue .line{width:1px;height:34px;background:linear-gradient(var(--text-dimmer), transparent);position:relative;overflow:hidden;}
+  .scroll-cue .line::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--cyan);animation:scrollLine 2s ease-in-out infinite;}
+  @keyframes scrollLine{50%{top:100%;}100%{top:100%;}}
+
+  /* ================= MARQUEE ================= */
+  #trustbar{padding:34px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;background:rgba(16,24,17,.02);}
+  .marquee-label{text-align:center;font-size:12px;letter-spacing:.14em;color:var(--text-dimmer);text-transform:uppercase;margin-bottom:22px;}
+  .marquee-row{overflow:hidden;margin-bottom:10px;}
+  .marquee-row:last-child{margin-bottom:0;}
+  .marquee{display:flex;width:max-content;}
+  .marquee.dir-l{animation:marqueeL 26s linear infinite;}
+  .marquee.dir-r{animation:marqueeR 30s linear infinite;}
+  .marquee:hover{animation-play-state:paused;}
+  @keyframes marqueeL{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @keyframes marqueeR{from{transform:translateX(-50%);}to{transform:translateX(0);}}
+  .marquee span{display:flex;align-items:center;gap:10px;padding:0 34px;font-family:'Space Grotesk';font-weight:600;font-size:17px;color:var(--text-dimmer);white-space:nowrap;}
+  .marquee span::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--violet-2);}
+  .marquee.dir-r span{color:var(--text-dim);font-size:14px;font-weight:500;}
+  .marquee.dir-r span::before{background:var(--cyan);}
+
+  /* ================= SECTION HEADS ================= */
+  .section-pad{padding:130px 0;}
+  .section-head{max-width:660px;margin-bottom:64px;}
+  .section-tag{font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+  .section-tag::before{content:none;}
+  .section-head h2{font-size:clamp(30px,4vw,46px);line-height:1.12;font-weight:700;}
+  .mask-wrap{display:block;overflow:hidden;}
+  .mask-inner{display:block;}
+  .section-head p{color:var(--text-dim);font-size:17px;margin-top:18px;line-height:1.6;}
+
+  /* ================= PAIN POINTS (tilt cards) ================= */
+  .pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  @media(max-width:900px){.pain-grid{grid-template-columns:1fr;}}
+  .tilt-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px;
+    transition:border-color .4s var(--ease), box-shadow .4s var(--ease);position:relative;overflow:hidden;transform-style:preserve-3d;will-change:transform;display:block;}
+  .clickable-card{cursor:pointer;}
+  .card-cta{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font-size:13.5px;font-weight:700;color:var(--violet);
+    opacity:0;transform:translateY(6px);transition:all .35s var(--ease);}
+  .card-cta svg{width:14px;height:14px;transition:transform .3s var(--ease);}
+  .clickable-card:hover .card-cta{opacity:1;transform:translateY(0);}
+  .clickable-card:hover .card-cta svg{transform:translate(3px,-3px);}
+  .tilt-card::before{content:'';position:absolute;inset:0;background:var(--grad-main);opacity:0;transition:opacity .4s var(--ease);mix-blend-mode:overlay;pointer-events:none;}
+  .tilt-card:hover{border-color:rgba(22,131,74,.4);box-shadow:0 20px 50px var(--shadow-lg);}
+  .tilt-card:hover::before{opacity:.5;}
+  .pain-num{font-family:'JetBrains Mono';color:var(--text-dimmer);font-size:13px;margin-bottom:22px;display:block;}
+  .pain-card h3{font-size:21px;margin-bottom:12px;font-weight:600;}
+  .pain-card p{color:var(--text-dim);font-size:15px;line-height:1.6;}
+  .pain-card .glow-icon{width:44px;height:44px;border-radius:12px;background:rgba(22,131,74,.14);display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+  .pain-card .glow-icon svg{width:22px;height:22px;color:var(--violet-2);}
+
+  /* ================= PIPELINE (pinned scrollytelling) ================= */
+  #pipeline{position:relative;}
+  .pipeline-pin{padding:130px 0;}
+  .pipe-step-label{position:absolute;top:40px;right:32px;font-size:12px;color:var(--text-dimmer);letter-spacing:.1em;}
+  .pipeline-svg-wrap{position:relative;margin-top:70px;}
+  #pipeSvg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;overflow:visible;}
+  .pipe-dot{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--cyan);
+    box-shadow:0 0 12px var(--cyan), 0 0 3px #fff;transform:translate(-50%,-50%);z-index:1;pointer-events:none;opacity:0;transition:opacity .3s;}
+  @media(max-width:900px){#pipeSvg,.pipe-dot{display:none;}}
+
+  .pipeline-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative;z-index:1;}
+  @media(max-width:900px){.pipeline-grid{grid-template-columns:1fr;gap:36px;}}
+  .pipe-node{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px 22px;text-align:center;transition:all .5s var(--ease);}
+  .pipe-node.active{border-color:var(--cyan);box-shadow:0 0 40px rgba(169,216,110,.18);transform:translateY(-6px);}
+  .pipe-node .pipe-icon{width:52px;height:52px;border-radius:14px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;background:var(--surface-2);transition:all .5s var(--ease);}
+  .pipe-node.active .pipe-icon{background:var(--grad-flair);box-shadow:0 0 26px rgba(169,216,110,.4);}
+  .pipe-node .pipe-icon svg{width:24px;height:24px;color:var(--text-dim);transition:color .5s;}
+  .pipe-node.active .pipe-icon svg{color:#04140b;}
+  .pipe-node h4{font-size:16.5px;margin-bottom:8px;}
+  .pipe-node p{font-size:13.5px;color:var(--text-dimmer);line-height:1.5;}
+  .pipe-node .pipe-tag{font-family:'JetBrains Mono';font-size:11px;color:var(--text-dimmer);letter-spacing:.08em;margin-bottom:14px;display:block;}
+
+  /* ================= SERVICES (3 real pillars) ================= */
+  .svc-block{margin-bottom:70px;}
+  .svc-block:last-child{margin-bottom:0;}
+  .svc-top{display:flex;gap:40px;align-items:center;margin-bottom:32px;flex-wrap:wrap;}
+  .svc-media{position:relative;width:320px;flex-shrink:0;border-radius:20px;overflow:hidden;box-shadow:0 20px 50px var(--shadow-md);}
+  .svc-media img{width:100%;height:220px;object-fit:cover;display:block;}
+  .svc-num{position:absolute;top:14px;left:18px;font-family:'Space Grotesk';font-weight:700;font-size:34px;color:var(--pink);
+    text-shadow:0 2px 12px rgba(0,0,0,.5);}
+  .svc-heading{flex:1;min-width:240px;}
+  .svc-heading h3{font-size:clamp(24px,3vw,32px);font-weight:700;margin-bottom:10px;}
+  .svc-heading p{color:var(--text-dim);font-size:16px;line-height:1.6;max-width:480px;}
+  .svc-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  @media(max-width:900px){.svc-cards{grid-template-columns:1fr 1fr;} .svc-top{flex-direction:column;align-items:flex-start;}.svc-media{width:100%;}}
+  @media(max-width:560px){.svc-cards{grid-template-columns:1fr;}}
+  .svc-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 22px;transition:all .35s var(--ease);}
+  .svc-card:hover{transform:translateY(-5px);border-color:rgba(22,131,74,.3);box-shadow:0 16px 36px var(--shadow-sm);}
+  .svc-icon{width:42px;height:42px;border-radius:11px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:background .3s;}
+  .svc-card:hover .svc-icon{background:var(--grad-flair);}
+  .svc-icon svg{width:21px;height:21px;color:var(--violet);transition:color .3s;}
+  .svc-card:hover .svc-icon svg{color:#fff;}
+  .svc-card h4{font-size:16px;font-weight:600;margin-bottom:8px;}
+  .svc-card p{font-size:13.5px;color:var(--text-dim);line-height:1.55;}
+
+
+  /* ================= FLAIR ================= */
+  #flair{position:relative;padding:150px 0;margin:40px 0;overflow:hidden;
+    background:radial-gradient(ellipse 70% 60% at 15% 20%, rgba(22,131,74,.16), transparent 60%), radial-gradient(ellipse 60% 50% at 90% 80%, rgba(169,216,110,.14), transparent 60%), var(--bg-soft);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .flair-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;}
+  @media(max-width:960px){.flair-grid{grid-template-columns:1fr;gap:56px;}}
+  .flair-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:var(--grad-flair);color:#04140b;
+    font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:24px;box-shadow:0 6px 22px rgba(169,216,110,.3);}
+  .flair-badge svg{width:14px;height:14px;}
+  #flair h2{font-size:clamp(32px,4.4vw,50px);font-weight:700;line-height:1.1;margin-bottom:22px;}
+  #flair .flair-lead{font-size:17.5px;color:var(--text-dim);line-height:1.65;margin-bottom:32px;max-width:520px;}
+  .flair-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:38px;}
+  @media(max-width:520px){.flair-features{grid-template-columns:1fr;}}
+  .flair-feature{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text-dim);}
+  .flair-feature svg{width:17px;height:17px;color:var(--cyan);flex-shrink:0;margin-top:1px;}
+
+  .flair-mock{background:linear-gradient(180deg,#ffffff,#eef3ea);border:1px solid rgba(0,0,0,.07);border-radius:20px;padding:22px;box-shadow:0 30px 70px var(--shadow-lg);
+    position:relative;transform-style:preserve-3d;will-change:transform;}
+  /* recreated dashboard mockup (real UI, not a screenshot) */
+  .flair-dash-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .flair-dash-logo{font-family:'Poppins',sans-serif;font-weight:700;font-size:19px;color:var(--violet);}
+  .flair-dash-logo .logo-dot{color:var(--cyan);}
+  .flair-dash-pill{padding:5px 12px;border-radius:999px;border:1px solid rgba(0,0,0,.08);background:#fff;font-size:11.5px;color:rgba(20,30,20,.6);}
+  .flair-dash-avatar{margin-left:auto;width:26px;height:26px;border-radius:50%;background:var(--grad-flair);color:#fff;font-size:11px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;}
+
+  .flair-dash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+  .fd-kpi{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:12px 14px;}
+  .fd-kpi-label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:rgba(20,30,20,.45);margin-bottom:6px;}
+  .fd-kpi-value{font-family:'Space Grotesk';font-weight:700;font-size:22px;color:#10180f;}
+  .fd-kpi-sub{display:block;font-size:11px;color:var(--violet);font-weight:600;margin-top:2px;}
+
+  .fd-panel-title{font-size:12.5px;font-weight:700;color:#10180f;margin-bottom:12px;}
+  .flair-dash-chart{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:14px 16px;margin-bottom:12px;}
+  .fd-chart-bars{display:flex;align-items:flex-end;gap:10px;height:70px;}
+  .fd-bar{flex:1;height:var(--h);min-height:4px;background:var(--grad-flair);border-radius:4px 4px 0 0;position:relative;
+    transform:scaleY(0);transform-origin:bottom;transition:transform 1s var(--ease);}
+  .fd-bar.in{transform:scaleY(1);}
+  .fd-bar-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(20,30,20,.45);white-space:nowrap;}
+
+  .flair-dash-list{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:14px 16px;margin-bottom:12px;}
+  .fd-lead-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;font-size:13px;border-top:1px solid rgba(0,0,0,.05);}
+  .fd-lead-row:first-of-type{border-top:none;}
+  .fd-lead-score{font-family:'JetBrains Mono';font-weight:600;color:var(--violet);background:rgba(22,131,74,.08);padding:2px 8px;border-radius:6px;font-size:12px;}
+
+  .flair-dash-perf{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:14px 10px;}
+  .fd-perf{text-align:center;}
+  .fd-perf-value{display:block;font-family:'Space Grotesk';font-weight:700;font-size:17px;color:#10180f;}
+  .fd-perf-label{display:block;font-size:9.5px;color:rgba(20,30,20,.45);margin-top:2px;}
+
+  .flair-mock-glow{position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:var(--grad-flair);filter:blur(70px);opacity:.35;z-index:-1;}
+
+
+  /* ================= PROCESS ================= */
+  .process-line{position:relative;padding-left:36px;}
+  .process-track{position:absolute;left:9px;top:8px;bottom:8px;width:1px;background:var(--line);}
+  .process-fill{position:absolute;left:9px;top:8px;width:1px;height:0%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);}
+  .process-step{position:relative;padding:0 0 56px 0;margin:0;display:block;width:100%;text-align:left;background:none;border:none;font:inherit;color:inherit;cursor:pointer;}
+  .process-step:last-child{padding-bottom:0;}
+  .process-step::before{content:'';position:absolute;left:-36px;top:2px;width:19px;height:19px;border-radius:50%;background:var(--bg);border:2px solid var(--text-dimmer);transition:all .5s var(--ease);}
+  .process-step.in::before{border-color:var(--cyan);box-shadow:0 0 16px rgba(63,174,114,.4);background:var(--cyan);}
+  .process-step .p-num{font-family:'JetBrains Mono';font-size:12.5px;color:var(--text-dimmer);letter-spacing:.08em;margin-bottom:8px;display:block;}
+  .process-step h3{font-size:21px;margin-bottom:10px;font-weight:600;display:flex;align-items:center;gap:10px;}
+  .process-step h3::after{content:'+';font-size:16px;color:var(--violet);transition:transform .35s var(--ease);margin-left:auto;}
+  .process-step.open h3::after{transform:rotate(45deg);}
+  .process-step p{color:var(--text-dim);font-size:15px;max-width:560px;line-height:1.65;}
+  .p-more{display:block;max-height:0;opacity:0;overflow:hidden;color:var(--violet-2);font-size:14px;line-height:1.6;max-width:560px;
+    transition:max-height .5s var(--ease), opacity .4s var(--ease), margin .4s var(--ease);}
+  .process-step.open .p-more{max-height:120px;opacity:1;margin-top:12px;}
+
+  /* ================= ABOUT ================= */
+  .about-illustrated{position:relative;}
+  .about-ai-art{position:absolute;top:-60px;right:-40px;width:280px;height:280px;z-index:-1;opacity:.7;}
+  @media(max-width:900px){.about-ai-art{display:none;}}
+  #about .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;}
+  @media(max-width:900px){#about .about-grid{grid-template-columns:1fr;gap:46px;}}
+  .about-quote{font-family:'Space Grotesk';font-size:clamp(22px,2.6vw,30px);line-height:1.35;font-weight:600;border-left:2px solid var(--violet);padding-left:26px;}
+  .about-stats{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px;}
+  .about-stat .num{font-family:'Space Grotesk';font-size:36px;font-weight:700;background:var(--grad-main);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .about-stat .lbl{font-size:13px;color:var(--text-dimmer);margin-top:4px;}
+  .about-panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:36px;}
+  .about-panel h3{font-size:19px;margin-bottom:18px;}
+  .about-panel ul li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--text-dim);padding:10px 0;border-bottom:1px solid var(--line);}
+  .about-panel ul li:last-child{border-bottom:none;}
+  .about-panel ul li svg{width:17px;height:17px;color:var(--cyan);flex-shrink:0;margin-top:2px;}
+
+  /* ================= CONTACT ================= */
+  #contact{background:var(--surface);border-radius:28px;border:1px solid var(--line);padding:80px 60px;position:relative;overflow:hidden;margin-bottom:120px;}
+  @media(max-width:700px){#contact{padding:50px 26px;}}
+  #contact::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:80%;height:200%;background:radial-gradient(ellipse, rgba(22,131,74,.14), transparent 65%);pointer-events:none;}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;position:relative;z-index:1;}
+  @media(max-width:900px){.contact-grid{grid-template-columns:1fr;}}
+  .contact-info h2{font-size:clamp(28px,3.6vw,42px);margin-bottom:20px;}
+  .contact-info p{color:var(--text-dim);font-size:16px;line-height:1.6;margin-bottom:30px;max-width:420px;}
+  .contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:16px;font-size:14.5px;color:var(--text-dim);}
+  .contact-detail svg{width:18px;height:18px;color:var(--violet-2);}
+  .form-field{margin-bottom:18px;}
+  .form-field label{display:block;font-size:13px;color:var(--text-dimmer);margin-bottom:7px;}
+  .form-field input, .form-field textarea{width:100%;background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:13px 15px;color:var(--text);font-family:'Inter';font-size:14.5px;transition:border-color .3s;}
+  .form-field input:focus, .form-field textarea:focus{outline:none;border-color:var(--violet);}
+  .form-submit{width:100%;padding:15px;border-radius:10px;background:var(--grad-main);color:#fff;font-weight:700;border:none;cursor:pointer;font-size:15px;}
+
+  /* ================= FOOTER ================= */
+  footer{border-top:1px solid var(--line);padding:70px 0 40px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:40px;margin-bottom:60px;}
+  @media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr;}}
+  .footer-col h4{font-size:13px;color:var(--text-dimmer);text-transform:uppercase;letter-spacing:.08em;margin-bottom:18px;}
+  .footer-col a{display:block;font-size:14.5px;color:var(--text-dim);margin-bottom:12px;transition:color .2s;}
+  .footer-col a:hover{color:var(--cyan);}
+  .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-top:1px solid var(--line);padding-top:28px;font-size:13px;color:var(--text-dimmer);}
+  .footer-social{display:flex;gap:14px;}
+  .footer-social a{width:36px;height:36px;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;transition:all .3s;}
+  .footer-social a:hover{background:var(--violet);transform:translateY(-3px);}
+  .footer-social svg{width:16px;height:16px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ================= RIPPLE ================= */
+  .ripple{position:absolute;border-radius:50%;background:rgba(22,131,74,.35);transform:translate(-50%,-50%) scale(0);
+    width:10px;height:10px;pointer-events:none;animation:rippleGrow .7s ease-out forwards;}
+  @keyframes rippleGrow{to{transform:translate(-50%,-50%) scale(22);opacity:0;}}
+</style>
+</head>
+<body>
+
+<div id="preloader">
+  <img src="data:image/png;base64,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" alt="Omnis Conseil">
+  <div class="preloader-bar"><div class="preloader-fill" id="preloaderFill"></div></div>
+  <div class="preloader-pct mono" id="preloaderPct">0%</div>
+</div>
+
+<canvas id="bg-canvas"></canvas>
+<div id="scroll-progress"></div>
+<div id="cursor-glow"></div>
+<div id="cursor-ring"></div>
+
+<header id="site-header">
+  <nav class="wrap">
+    <a href="#hero" class="logo"><span class="logo-word">omnis conseil<span class="logo-dot">.</span></span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#flair" class="nav-flair">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg>
+        Flair
+      </a></li>
+      <li><a href="#process">Processus</a></li>
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#contact" class="nav-cta magnetic">Audit gratuit</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section id="hero" class="wrap">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>OMNIS CONSEIL — CONSEIL & INTELLIGENCE ARTIFICIELLE</div>
+      <h1 class="hero-title">
+        <div class="word"><span>Nous</span></div>
+        <div class="word"><span>&nbsp;transformons</span></div>
+        <br>
+        <div class="word"><span>votre</span></div>
+        <div class="word"><span>&nbsp;entreprise</span></div>
+        <br>
+        <div class="word"><span class="grad-text">grâce&nbsp;à&nbsp;l'IA.</span></div>
+      </h1>
+      <p class="hero-sub">Omnis Conseil accompagne les entreprises dans leur transformation numérique : audit, stratégie et déploiement d'agents IA sur mesure — pour transformer vos données en décisions, et vos process en avantage concurrentiel.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary magnetic">Démarrer un audit IA
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+        </a>
+        <a href="#flair" class="btn btn-flair magnetic">Découvrir Flair
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-visual-inner" id="heroVisualInner">
+        <svg width="100%" height="100%" viewBox="0 0 500 500" fill="none" style="position:absolute;inset:0;">
+          <defs><linearGradient id="heroGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#16834a"/><stop offset="100%" stop-color="#a9d86e"/></linearGradient></defs>
+          <g id="heroNodes" stroke="url(#heroGrad)" stroke-width="1" opacity="0.55"></g>
+          <g id="heroDots" fill="url(#heroGrad)"></g>
+        </svg>
+        <div class="float-chip c1" id="chip1"><span class="fc-dot"></span><span class="fc-text">Agent IA actif</span></div>
+        <div class="float-chip c2" id="chip2"><span class="fc-dot"></span><span class="fc-text">Audit de votre entreprise</span></div>
+        <div class="float-chip c3" id="chip3"><span class="fc-dot"></span><span class="fc-text">Décision recommandée</span></div>
+      </div>
+    </div>
+
+    <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
+  </section>
+
+  <!-- TRUSTBAR -->
+  <section id="trustbar">
+    <div class="marquee-label">Nos domaines d'expertise</div>
+    <div class="marquee-row"><div class="marquee dir-l">
+      <span>Stratégie IA</span><span>Automatisation des processus</span><span>Agents IA sur mesure</span><span>Data & Analytics</span><span>Transformation numérique</span><span>Conduite du changement</span><span>Intégration système</span>
+      <span>Stratégie IA</span><span>Automatisation des processus</span><span>Agents IA sur mesure</span><span>Data & Analytics</span><span>Transformation numérique</span><span>Conduite du changement</span><span>Intégration système</span>
+    </div></div>
+    <div class="marquee-row"><div class="marquee dir-r">
+      <span>Audit data</span><span>Agents autonomes</span><span>Scoring IA</span><span>Prospection augmentée</span><span>CRM & ERP</span><span>Sécurité & conformité</span><span>Accompagnement au changement</span>
+      <span>Audit data</span><span>Agents autonomes</span><span>Scoring IA</span><span>Prospection augmentée</span><span>CRM & ERP</span><span>Sécurité & conformité</span><span>Accompagnement au changement</span>
+    </div></div>
+  </section>
+
+  <!-- PAIN POINTS -->
+  <section class="section-pad wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Constat</div>
+      <h2>Où votre entreprise perd-elle le plus de temps aujourd'hui ?</h2>
+      <p>Trois symptômes reviennent chez presque tous nos clients avant qu'on intervienne. Reconnaissez-vous les vôtres ?</p>
+    </div>
+    <div class="pain-grid stagger">
+      <a href="#services" class="pain-card tilt-card reveal clickable-card" style="--i:0">
+        <div class="glow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3M12 3a9 9 0 100 18 9 9 0 000-18z"/></svg></div>
+        <span class="pain-num">01 · Processus</span>
+        <h3>Des équipes noyées dans les tâches manuelles</h3>
+        <p>Saisie, relances, reporting : le temps de vos équipes part dans des tâches répétitives à faible valeur, au lieu d'être investi sur la stratégie.</p>
+        <span class="card-cta">Voir comment on résout ça <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
+      </a>
+      <a href="#flair" class="pain-card tilt-card reveal clickable-card" style="--i:1">
+        <div class="glow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/></svg></div>
+        <span class="pain-num">02 · Prospection</span>
+        <h3>Une prospection commerciale qui ne suit plus</h3>
+        <p>Trouver les bons prospects, les qualifier et les relancer au bon moment demande un temps que vos équipes commerciales n'ont plus.</p>
+        <span class="card-cta">Découvrir Flair <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
+      </a>
+      <a href="#pipeline" class="pain-card tilt-card reveal clickable-card" style="--i:2">
+        <div class="glow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></div>
+        <span class="pain-num">03 · Décision</span>
+        <h3>Des décisions prises sans données fiables</h3>
+        <p>Vos données existent, mais elles sont dispersées, non exploitées, et n'alimentent pas les décisions qui font vraiment avancer l'entreprise.</p>
+        <span class="card-cta">Voir notre méthode <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SIGNATURE PIPELINE (pinned scrollytelling) -->
+  <section id="pipeline">
+    <div class="pipeline-pin wrap">
+      <div class="pipe-step-label mono">ÉTAPE <span id="pipeStepNum">01</span> / 04</div>
+      <div class="section-head reveal">
+        <div class="section-tag">Notre méthode</div>
+        <h2>De la donnée brute à l'action autonome</h2>
+        <p>Continuez à faire défiler : notre approche connecte vos données, votre IA et vos équipes dans un même flux continu.</p>
+      </div>
+
+      <div class="pipeline-svg-wrap">
+        <svg id="pipeSvg">
+          <path id="pipePath" fill="none" stroke="url(#pipeGrad)" stroke-width="2"/>
+          <defs><linearGradient id="pipeGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#16834a"/><stop offset="100%" stop-color="#a9d86e"/></linearGradient></defs>
+        </svg>
+        <div class="pipe-dot" id="pipeDotEl"></div>
+        <div class="pipeline-grid" id="pipelineGrid">
+          <div class="pipe-node" data-step="0">
+            <span class="pipe-tag">ÉTAPE 01</span>
+            <div class="pipe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h7"/></svg></div>
+            <h4>Données</h4>
+            <p>Vos sources internes et externes sont collectées et structurées.</p>
+          </div>
+          <div class="pipe-node" data-step="1">
+            <span class="pipe-tag">ÉTAPE 02</span>
+            <div class="pipe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div>
+            <h4>Intelligence artificielle</h4>
+            <p>Des modèles et agents IA analysent, classent et scorent en continu.</p>
+          </div>
+          <div class="pipe-node" data-step="2">
+            <span class="pipe-tag">ÉTAPE 03</span>
+            <div class="pipe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+            <h4>Décision</h4>
+            <p>Des recommandations claires, priorisées, prêtes à être validées.</p>
+          </div>
+          <div class="pipe-node" data-step="3">
+            <span class="pipe-tag">ÉTAPE 04</span>
+            <div class="pipe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+            <h4>Action</h4>
+            <p>Vos équipes ou vos agents IA exécutent, sans friction ni ressaisie.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="section-pad wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Services</div>
+      <h2>Un accompagnement complet, du diagnostic au déploiement</h2>
+      <p>Trois piliers concrets pour accélérer votre croissance et votre transformation.</p>
+    </div>
+
+    <div class="svc-block reveal">
+      <div class="svc-top">
+<div class="svc-media">
+        <img src="https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&w=900&q=80" alt="Robot et intelligence artificielle" loading="lazy">
+        <span class="svc-num">01</span>
+      </div>
+      <div class="svc-heading">
+        <h3>IA & Automatisation</h3>
+        <p>Intégrez l'IA de façon utile pour gagner du temps et améliorer la performance.</p>
+      </div>
+      </div>
+      <div class="svc-cards">
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><h4>Audit IA</h4><p>Identification des cas d'usage à fort ROI, des quick wins et des priorités de déploiement.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M16 3.13a4 4 0 010 7.75M9 3.13a4 4 0 000 7.75M12 14a4 4 0 100-8 4 4 0 000 8z"/></svg></div><h4>Formation IA</h4><p>Montée en compétence des équipes sur les usages concrets, les outils et les bonnes pratiques.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div><h4>Solutions IA sur mesure</h4><p>Conception d'assistants et d'automatisations adaptés à vos process et à vos données.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div><h4>Optimisation grâce à l'IA</h4><p>Automatisation des tâches, amélioration des workflows et gain de performance au quotidien.</p></div>
+      </div>
+    </div>
+
+    <div class="svc-block reveal">
+      <div class="svc-top">
+<div class="svc-media">
+        <img src="https://images.unsplash.com/photo-1767424412548-1a1ac7f4b9bc?auto=format&fit=crop&w=900&q=80" alt="Analyse commerciale et graphiques de performance" loading="lazy">
+        <span class="svc-num">02</span>
+      </div>
+      <div class="svc-heading">
+        <h3>Développement commercial</h3>
+        <p>Accélérez votre croissance avec des stratégies éprouvées et une exécution structurée.</p>
+      </div>
+      </div>
+      <div class="svc-cards">
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><h4>Audit commercial</h4><p>Analyse complète de votre acquisition et de votre cycle de vente pour identifier les leviers prioritaires.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></div><h4>Stratégie commerciale</h4><p>Positionnement, ciblage et plan d'action clair pour générer plus d'opportunités qualifiées.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg></div><h4>Formation commerciale</h4><p>Scripts, méthodes et routines pour améliorer la performance et la régularité de vos équipes.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></div><h4>Mise en place des process</h4><p>Structuration CRM, pipeline, relances et reporting pour un suivi efficace et mesurable.</p></div>
+      </div>
+    </div>
+
+    <div class="svc-block reveal">
+      <div class="svc-top">
+<div class="svc-media">
+        <img src="https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?auto=format&fit=crop&w=900&q=80" alt="Poste de travail digital et création web" loading="lazy">
+        <span class="svc-num">03</span>
+      </div>
+      <div class="svc-heading">
+        <h3>Créations & présence digitale</h3>
+        <p>Une présence en ligne solide et orientée conversion pour soutenir la croissance.</p>
+      </div>
+      </div>
+      <div class="svc-cards">
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></div><h4>Sites vitrines</h4><p>Une vitrine claire et premium, pensée pour convertir et générer des demandes entrantes.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div><h4>Sites e-commerce</h4><p>Un parcours d'achat optimisé pour augmenter le taux de conversion et le panier moyen.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h4>Applications spécifiques</h4><p>Des outils sur mesure pour automatiser, centraliser et simplifier vos opérations.</p></div>
+        <div class="svc-card"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><h4>Campagnes Meta & Google Ads</h4><p>Acquisition pilotée par la donnée : ciblage, tracking et optimisation continue des performances.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLAIR -->
+  <section id="flair">
+    <div class="wrap">
+      <div class="flair-grid">
+        <div class="reveal">
+          <div class="flair-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg>Notre produit</div>
+          <h2>Flair. L'agent IA qui trouve vos prochains clients.</h2>
+          <p class="flair-lead">Flair scanne le marché en continu, identifie et qualifie vos prospects B2B, puis alimente votre pipeline commercial — automatiquement, jour et nuit. Conçu par Omnis Conseil pour les équipes qui veulent vendre plus, sans prospecter plus.</p>
+          <div class="flair-features">
+            <div class="flair-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Détection de prospects en temps réel</div>
+            <div class="flair-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Scoring IA de qualification</div>
+            <div class="flair-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Enrichissement automatique des fiches</div>
+            <div class="flair-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Intégration à votre CRM</div>
+          </div>
+          <a href="https://flair-ai-leads.lovable.app" target="_blank" rel="noopener" class="btn btn-flair magnetic">Essayer Flair
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+          </a>
+        </div>
+
+        <div class="reveal-scale">
+          <div class="flair-mock tilt-card" id="flairMock">
+            <div class="flair-mock-glow"></div>
+            <div class="flair-dash-head">
+              <div class="flair-dash-logo">flair<span class="logo-dot">.</span></div>
+              <div class="flair-dash-pill">Vue client</div>
+              <div class="flair-dash-avatar">OC</div>
+            </div>
+
+            <div class="flair-dash-kpis">
+              <div class="fd-kpi">
+                <span class="fd-kpi-label">Prospects livrés</span>
+                <span class="fd-kpi-value" data-target="128">0</span>
+              </div>
+              <div class="fd-kpi">
+                <span class="fd-kpi-label">Haute priorité</span>
+                <span class="fd-kpi-value" data-target="34">0</span>
+                <span class="fd-kpi-sub">27% du total</span>
+              </div>
+              <div class="fd-kpi">
+                <span class="fd-kpi-label">Score moyen</span>
+                <span class="fd-kpi-value" data-target="82">0</span>
+              </div>
+            </div>
+
+            <div class="flair-dash-chart">
+              <div class="fd-panel-title">Répartition des scores</div>
+              <div class="fd-chart-bars" id="fdChartBars">
+                <div class="fd-bar" style="--h:14%"><span class="fd-bar-label">&lt;60</span></div>
+                <div class="fd-bar" style="--h:30%"><span class="fd-bar-label">60-69</span></div>
+                <div class="fd-bar" style="--h:52%"><span class="fd-bar-label">70-79</span></div>
+                <div class="fd-bar" style="--h:80%"><span class="fd-bar-label">80-89</span></div>
+                <div class="fd-bar" style="--h:100%"><span class="fd-bar-label">90+</span></div>
+              </div>
+            </div>
+
+            <div class="flair-dash-list">
+              <div class="fd-panel-title">Meilleurs prospects</div>
+              <div class="fd-lead-row"><span>Nova Industries</span><span class="fd-lead-score">96</span></div>
+              <div class="fd-lead-row"><span>Atlas Robotics</span><span class="fd-lead-score">94</span></div>
+              <div class="fd-lead-row"><span>Kairo Systems</span><span class="fd-lead-score">91</span></div>
+            </div>
+
+            <div class="flair-dash-perf">
+              <div class="fd-perf"><span class="fd-perf-value">18</span><span class="fd-perf-label">RDV obtenus</span></div>
+              <div class="fd-perf"><span class="fd-perf-value">24%</span><span class="fd-perf-label">Taux de RDV</span></div>
+              <div class="fd-perf"><span class="fd-perf-value">7</span><span class="fd-perf-label">Deals gagnés</span></div>
+              <div class="fd-perf"><span class="fd-perf-value">39%</span><span class="fd-perf-label">Conversion</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" class="section-pad wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Notre processus</div>
+      <h2>Un déploiement en quatre temps</h2>
+      <p>Un cadre clair, pensé pour aller vite sans sacrifier la qualité de l'accompagnement.</p>
+    </div>
+    <div class="process-line">
+      <div class="process-track"></div>
+      <div class="process-fill" id="processFill"></div>
+      <button class="process-step reveal" type="button">
+        <span class="p-num">01</span><h3>Diagnostic</h3>
+        <p>Nous cartographions vos processus, vos données et vos irritants pour identifier les meilleurs leviers IA.</p>
+        <span class="p-more">Livrable : une cartographie complète de vos flux et une liste priorisée d'opportunités IA, chiffrée par effort et par impact.</span>
+      </button>
+      <button class="process-step reveal" type="button">
+        <span class="p-num">02</span><h3>Stratégie</h3>
+        <p>Nous définissons une feuille de route priorisée, avec des objectifs mesurables et un calendrier réaliste.</p>
+        <span class="p-more">Livrable : une feuille de route à 6-12 mois, validée avec votre direction, avec jalons et responsables identifiés.</span>
+      </button>
+      <button class="process-step reveal" type="button">
+        <span class="p-num">03</span><h3>Implémentation</h3>
+        <p>Nous déployons les solutions et agents IA retenus, en intégration avec vos outils existants.</p>
+        <span class="p-more">Livrable : les outils en production, connectés à votre CRM/ERP, avec vos équipes formées à leur usage quotidien.</span>
+      </button>
+      <button class="process-step reveal" type="button">
+        <span class="p-num">04</span><h3>Optimisation continue</h3>
+        <p>Nous suivons la performance dans la durée et ajustons pour maximiser la valeur créée.</p>
+        <span class="p-more">Livrable : un point de suivi régulier avec ajustements des modèles et des process au fil de l'usage réel.</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section-pad wrap">
+    <div class="about-grid">
+      <div class="reveal about-illustrated">
+        <svg class="about-ai-art" viewBox="0 0 300 300" fill="none" aria-hidden="true">
+          <circle cx="150" cy="150" r="90" stroke="#16834a" stroke-width="1" opacity=".25"/>
+          <circle cx="150" cy="150" r="60" stroke="#16834a" stroke-width="1" opacity=".2"/>
+          <g stroke="#16834a" stroke-width="1.2" opacity=".35">
+            <line x1="150" y1="150" x2="60" y2="70"/><line x1="150" y1="150" x2="240" y2="80"/>
+            <line x1="150" y1="150" x2="250" y2="200"/><line x1="150" y1="150" x2="70" y2="230"/>
+            <line x1="150" y1="150" x2="150" y2="30"/>
+          </g>
+          <g fill="#16834a"><circle cx="150" cy="150" r="7"/><circle cx="60" cy="70" r="4"/><circle cx="240" cy="80" r="4"/><circle cx="250" cy="200" r="4"/><circle cx="70" cy="230" r="4"/><circle cx="150" cy="30" r="4"/></g>
+        </svg>
+        <div class="section-tag">À propos d'Omnis</div>
+        <p class="about-quote">« Nous croyons que l'IA ne doit pas remplacer vos équipes — elle doit leur redonner le temps de faire ce qu'elles font le mieux. »</p>
+        <div class="about-stats">
+          <div class="about-stat"><div class="num">360°</div><div class="lbl">Accompagnement, du conseil au déploiement</div></div>
+          <div class="about-stat"><div class="num">24/7</div><div class="lbl">Agents IA opérationnels en continu</div></div>
+        </div>
+      </div>
+      <div class="about-panel reveal">
+        <h3>Pourquoi Omnis Conseil</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Une équipe qui comprend autant vos enjeux métier que la technique IA</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Du conseil en stratégie et développement commercial à la data science, sous un même toit</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Nos propres produits IA, comme Flair, éprouvés avant d'être proposés</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Un accompagnement dans la durée — conduite du changement et formation incluses, pas juste un livrable</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="wrap reveal">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-tag">Contact</div>
+        <h2>Discutons de votre projet</h2>
+        <p>Un audit, un projet d'agent IA ou simplement une question ? Notre équipe vous répond sous 24h ouvrées.</p>
+        <div class="contact-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>contact@omnis-conseil.com</div>
+        <div class="contact-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+33 1 23 45 67 89</div>
+        <div class="contact-detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>Paris, France</div>
+      </div>
+      <form onsubmit="event.preventDefault(); this.querySelector('.form-submit').innerText='Message envoyé ✓';">
+        <div class="form-field"><label>Nom complet</label><input type="text" placeholder="Jean Dupont" required></div>
+        <div class="form-field"><label>Email professionnel</label><input type="email" placeholder="jean@entreprise.com" required></div>
+        <div class="form-field"><label>Entreprise</label><input type="text" placeholder="Nom de l'entreprise"></div>
+        <div class="form-field"><label>Votre message</label><textarea rows="4" placeholder="Parlez-nous de votre projet..." required></textarea></div>
+        <button class="form-submit magnetic" type="submit">Envoyer le message</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <a href="#hero" class="logo" style="margin-bottom:16px;display:inline-flex;"><span class="logo-word">omnis conseil<span class="logo-dot">.</span></span></a>
+      <p style="color:var(--text-dim);font-size:14px;line-height:1.6;max-width:280px;">Votre partenaire pour la transformation numérique et l'optimisation grâce à l'IA.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="#services">Services</a>
+      <a href="#pipeline">Notre méthode</a>
+      <a href="#process">Processus</a>
+      <a href="#about">À propos</a>
+    </div>
+    <div class="footer-col">
+      <h4>Produit</h4>
+      <a href="https://flair-ai-leads.lovable.app" target="_blank" rel="noopener">Flair</a>
+      <a href="#contact">Demander une démo</a>
+    </div>
+    <div class="footer-col">
+      <h4>Légal</h4>
+      <a href="/MentionsLegales">Mentions légales</a>
+      <a href="/PolitiqueConfidentialite">Confidentialité</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Omnis Conseil. Tous droits réservés.</span>
+    <div class="footer-social">
+      <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 110-4.13 2.07 2.07 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg></a>
+      <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23 22h-7l-5.5-6.7L4.3 22H1.2l8.1-9.3L1 2h7.2l5 6.1L18.9 2z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let gsapReady = (typeof gsap !== 'undefined');
+if (gsapReady) gsap.registerPlugin(ScrollTrigger);
+
+/* ================= PRELOADER ================= */
+const preloader = document.getElementById('preloader');
+const pFill = document.getElementById('preloaderFill');
+const pPct = document.getElementById('preloaderPct');
+
+function hidePreloader(){
+  if (!preloader) return;
+  if (gsapReady && !reduceMotion){
+    gsap.to(preloader, { yPercent:-100, duration:.9, ease:'power4.inOut', onComplete: ()=>{ preloader.style.display='none'; runHeroIntro(); } });
+  } else {
+    preloader.style.display='none';
+    runHeroIntro();
+  }
+}
+if (gsapReady && !reduceMotion){
+  const counter = { v: 0 };
+  gsap.to(counter, { v:100, duration:1.3, ease:'power2.out', onUpdate:()=>{
+      const val = Math.round(counter.v);
+      pFill.style.width = val+'%'; pPct.textContent = val+'%';
+    }, onComplete: hidePreloader });
+} else {
+  hidePreloader();
+}
+
+/* ================= HERO INTRO ================= */
+function runHeroIntro(){
+  if (!gsapReady || reduceMotion) return;
+  gsap.timeline()
+    .from('.hero-title .word span', { yPercent:110, duration:1, stagger:.08, ease:'power4.out' })
+    .from('.hero-sub', { opacity:0, y:20, duration:.8 }, '-=.55')
+    .from('.hero-ctas', { opacity:0, y:20, duration:.8 }, '-=.55')
+    .from('.float-chip', { opacity:0, y:30, scale:.8, stagger:.12, duration:.7, ease:'back.out(1.7)' }, '-=.4');
+}
+
+/* ================= NAV SCROLL STATE + PROGRESS ================= */
+const header = document.getElementById('site-header');
+const progress = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 40);
+  const h = document.documentElement;
+  const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  progress.style.width = pct + '%';
+});
+
+/* ================= MOBILE MENU ================= */
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+/* ================= CURSOR ================= */
+const glow = document.getElementById('cursor-glow');
+const ring = document.getElementById('cursor-ring');
+let ringX = gsapReady ? gsap.quickTo(ring, 'x', {duration:.15, ease:'power3'}) : null;
+let ringY = gsapReady ? gsap.quickTo(ring, 'y', {duration:.15, ease:'power3'}) : null;
+window.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px';
+  if (ringX){ ringX(e.clientX); ringY(e.clientY); }
+  else { ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px'; }
+});
+document.querySelectorAll('a, button, .tilt-card').forEach(el=>{
+  el.addEventListener('mouseenter', ()=> ring.classList.add('ring-hover'));
+  el.addEventListener('mouseleave', ()=> ring.classList.remove('ring-hover'));
+});
+
+/* ================= MAGNETIC BUTTONS ================= */
+if (gsapReady && !reduceMotion){
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    const xTo = gsap.quickTo(btn, 'x', {duration:.4, ease:'power3'});
+    const yTo = gsap.quickTo(btn, 'y', {duration:.4, ease:'power3'});
+    btn.addEventListener('mousemove', e=>{
+      const r = btn.getBoundingClientRect();
+      xTo((e.clientX - r.left - r.width/2) * 0.3);
+      yTo((e.clientY - r.top - r.height/2) * 0.3);
+    });
+    btn.addEventListener('mouseleave', ()=>{ xTo(0); yTo(0); });
+  });
+}
+
+/* ================= 3D TILT CARDS ================= */
+if (gsapReady && !reduceMotion){
+  document.querySelectorAll('.tilt-card').forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(card, { rotateY: px*10, rotateX: -py*10, transformPerspective:800, duration:.5, ease:'power2.out' });
+    });
+    card.addEventListener('mouseleave', ()=>{
+      gsap.to(card, { rotateY:0, rotateX:0, duration:.7, ease:'power3.out' });
+    });
+  });
+}
+
+/* ================= REVEAL ON SCROLL ================= */
+const revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in'); });
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+/* ================= PROCESS ACCORDION ================= */
+document.querySelectorAll('.process-step').forEach(step => {
+  step.addEventListener('click', () => {
+    const wasOpen = step.classList.contains('open');
+    document.querySelectorAll('.process-step.open').forEach(s => s.classList.remove('open'));
+    if (!wasOpen) step.classList.add('open');
+  });
+});
+
+/* ================= CLICK RIPPLE (everything clickable feels alive) ================= */
+document.querySelectorAll('.btn, .ptab, .process-step, .clickable-card, .nav-cta').forEach(el => {
+  el.style.position = el.style.position || 'relative';
+  el.style.overflow = el.style.overflow || 'hidden';
+  el.addEventListener('click', function(e){
+    const r = this.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.left = (e.clientX - r.left) + 'px';
+    ripple.style.top = (e.clientY - r.top) + 'px';
+    this.appendChild(ripple);
+    setTimeout(()=> ripple.remove(), 700);
+  });
+});
+
+/* ================= PIPELINE PINNED SCROLLYTELLING ================= */
+(function initPipeline(){
+  const wrap = document.querySelector('.pipeline-svg-wrap');
+  const svg = document.getElementById('pipeSvg');
+  const path = document.getElementById('pipePath');
+  const dotEl = document.getElementById('pipeDotEl');
+  const icons = document.querySelectorAll('.pipe-icon');
+  const nodes = document.querySelectorAll('.pipe-node');
+  const stepLabel = document.getElementById('pipeStepNum');
+  if (!path || !icons.length) return;
+
+  let len = 0;
+  let scrollTriggerInstance = null;
+
+  function measure(){
+    const wrapRect = wrap.getBoundingClientRect();
+    svg.setAttribute('width', wrapRect.width);
+    svg.setAttribute('height', wrapRect.height);
+    const pts = Array.from(icons).map(icon => {
+      const r = icon.getBoundingClientRect();
+      return { x: r.left + r.width/2 - wrapRect.left, y: r.top + r.height/2 - wrapRect.top };
+    });
+    const d = 'M' + pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L');
+    path.setAttribute('d', d);
+    len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    dotEl.style.opacity = window.innerWidth > 900 ? '1' : '0';
+  }
+
+  function setProgress(p){
+    if (!len) return;
+    path.style.strokeDashoffset = len * (1 - p);
+    const pt = path.getPointAtLength(len * p);
+    dotEl.style.left = pt.x + 'px'; dotEl.style.top = pt.y + 'px';
+    const stepIdx = Math.min(3, Math.floor(p * 4));
+    nodes.forEach((n,i)=> n.classList.toggle('active', i <= stepIdx));
+    stepLabel.textContent = String(stepIdx+1).padStart(2,'0');
+  }
+
+  measure();
+
+  if (gsapReady && !reduceMotion && window.innerWidth > 900){
+    scrollTriggerInstance = ScrollTrigger.create({
+      trigger: '#pipeline', start:'top 75%', end:'bottom 55%', scrub:0.3,
+      onUpdate: self => setProgress(self.progress)
+    });
+  } else {
+    setProgress(1);
+  }
+
+  let resizeTO;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTO);
+    resizeTO = setTimeout(() => {
+      measure();
+      if (gsapReady) ScrollTrigger.refresh();
+    }, 200);
+  });
+
+  window.addEventListener('load', measure);
+})();
+
+/* ================= PLATFORM TABS ================= */
+(function initPlatformTabs(){
+  const tabs = Array.from(document.querySelectorAll('.ptab'));
+  const pvIconWrap = document.getElementById('pvIconWrap');
+  const pvTitle = document.getElementById('pvTitle');
+  const pvDesc = document.getElementById('pvDesc');
+  const visual = document.getElementById('platformVisual');
+  if (!tabs.length) return;
+
+  const data = tabs.map(t => ({
+    icon: t.querySelector('.ptab-icon svg').outerHTML,
+    title: t.querySelector('.ptab-title').textContent,
+    desc: t.querySelector('.ptab-desc').textContent
+  }));
+
+  let current = 0, autoTimer, progressTween;
+
+  function fillProgress(idx, duration){
+    tabs.forEach(t => { const b = t.querySelector('.ptab-progress-bar'); if (gsapReady) gsap.set(b, {width:'0%'}); else b.style.width='0%'; });
+    const bar = tabs[idx].querySelector('.ptab-progress-bar');
+    if (gsapReady && !reduceMotion){
+      if (progressTween) progressTween.kill();
+      progressTween = gsap.to(bar, { width:'100%', duration: duration/1000, ease:'none' });
+    } else {
+      bar.style.width = '100%';
+    }
+  }
+
+  function activate(idx, restartTimer){
+    current = idx;
+    tabs.forEach(t => t.classList.toggle('active', +t.dataset.idx === idx));
+    const d = data[idx];
+    if (gsapReady && !reduceMotion){
+      gsap.to(visual, { opacity:0, y:8, duration:.2, onComplete:()=>{
+        pvIconWrap.innerHTML = d.icon; pvTitle.textContent = d.title; pvDesc.textContent = d.desc;
+        gsap.to(visual, { opacity:1, y:0, duration:.4 });
+      }});
+    } else {
+      pvIconWrap.innerHTML = d.icon; pvTitle.textContent = d.title; pvDesc.textContent = d.desc;
+    }
+    fillProgress(idx, 4500);
+    if (restartTimer){
+      clearInterval(autoTimer);
+      autoTimer = setInterval(()=> activate((current+1)%tabs.length, true), 4500);
+    }
+  }
+
+  tabs.forEach(t => t.addEventListener('click', ()=> activate(+t.dataset.idx, true)));
+  activate(0, true);
+})();
+
+/* ================= FLAIR DASHBOARD REVEAL ================= */
+if (gsapReady){
+  ScrollTrigger.create({
+    trigger: '#flair', start:'top 75%', once:true,
+    onEnter: ()=>{
+      document.querySelectorAll('#fdChartBars .fd-bar').forEach((bar, i) => {
+        setTimeout(()=> bar.classList.add('in'), i * 90);
+      });
+      document.querySelectorAll('.fd-kpi-value[data-target]').forEach(el => {
+        const target = parseInt(el.dataset.target, 10);
+        if (reduceMotion){ el.textContent = target; return; }
+        const obj = { v: 0 };
+        gsap.to(obj, { v: target, duration: 1.4, ease:'power2.out', onUpdate: () => { el.textContent = Math.round(obj.v); } });
+      });
+    }
+  });
+} else {
+  document.querySelectorAll('#fdChartBars .fd-bar').forEach(b => b.classList.add('in'));
+  document.querySelectorAll('.fd-kpi-value[data-target]').forEach(el => { el.textContent = el.dataset.target; });
+}
+
+/* ================= PROCESS FILL LINE ================= */
+if (gsapReady){
+  const processFill = document.getElementById('processFill');
+  const processSteps = document.querySelectorAll('.process-step');
+  if (!reduceMotion){
+    gsap.to(processFill, {
+      height:'100%', ease:'none',
+      scrollTrigger:{ trigger:'.process-line', start:'top 65%', end:'bottom 75%', scrub:0.5,
+        onUpdate: self => {
+          const idx = Math.min(processSteps.length-1, Math.floor(self.progress * processSteps.length));
+          processSteps.forEach((s,i)=> s.classList.toggle('in', i <= idx));
+        }
+      }
+    });
+  } else {
+    processFill.style.height = '100%';
+    processSteps.forEach(s=> s.classList.add('in'));
+  }
+}
+
+/* ================= ABOUT STATS REVEAL ================= */
+if (gsapReady && !reduceMotion){
+  gsap.from('.about-stat', {
+    opacity:0, y:20, scale:.9, stagger:.15, duration:.8, ease:'back.out(1.7)',
+    scrollTrigger:{ trigger:'.about-stats', start:'top 88%' }
+  });
+}
+
+/* ================= BACKGROUND NEURAL NETWORK CANVAS (viewport ambient) ================= */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, nodesArr = [];
+const mouse = { x:-1000, y:-1000 };
+
+function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+function initNodes(){
+  const count = Math.min(45, Math.floor((W*H)/42000));
+  nodesArr = Array.from({length: count}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    vx: (Math.random()-0.5)*0.28, vy: (Math.random()-0.5)*0.28,
+    r: Math.random()*1.6+0.6
+  }));
+}
+resize(); initNodes();
+window.addEventListener('resize', () => { resize(); initNodes(); });
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+window.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
+
+let frameSkip = false;
+function drawNetwork(){
+  ctx.clearRect(0,0,W,H);
+  for (const n of nodesArr){
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < 0 || n.x > W) n.vx *= -1;
+    if (n.y < 0 || n.y > H) n.vy *= -1;
+    const dxm = n.x - mouse.x, dym = n.y - mouse.y;
+    const dm = Math.sqrt(dxm*dxm + dym*dym);
+    if (dm < 110){
+      const f = (110 - dm) / 110;
+      n.x += (dxm/dm) * f * 1.6;
+      n.y += (dym/dm) * f * 1.6;
+    }
+  }
+  frameSkip = !frameSkip;
+  if (frameSkip){
+    for (let i=0;i<nodesArr.length;i++){
+      const a = nodesArr[i];
+      for (let j=i+1;j<nodesArr.length;j++){
+        const b = nodesArr[j];
+        const dx = a.x-b.x, dy = a.y-b.y;
+        const d = Math.sqrt(dx*dx+dy*dy);
+        if (d < 110){
+          ctx.strokeStyle = `rgba(22,131,74,${0.14*(1-d/110)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+  }
+  for (const n of nodesArr){
+    ctx.beginPath();
+    ctx.fillStyle = 'rgba(22,131,74,0.45)';
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+    ctx.fill();
+  }
+  if (!reduceMotion) requestAnimationFrame(drawNetwork);
+}
+drawNetwork();
+
+/* ================= HERO SVG DECORATION ================= */
+(function buildHeroSvg(){
+  const nodesG = document.getElementById('heroNodes');
+  const dotsG = document.getElementById('heroDots');
+  if (!nodesG) return;
+  const pts = Array.from({length: 16}, () => ({ x: Math.random()*460+20, y: Math.random()*460+20 }));
+  let linesHtml = '', dotsHtml = '';
+  for (let i=0;i<pts.length;i++){
+    for (let j=i+1;j<pts.length;j++){
+      const d = Math.hypot(pts[i].x-pts[j].x, pts[i].y-pts[j].y);
+      if (d < 130 && Math.random() > 0.55){
+        linesHtml += `<line x1="${pts[i].x}" y1="${pts[i].y}" x2="${pts[j].x}" y2="${pts[j].y}"/>`;
+      }
+    }
+    const r = Math.random()*2.5+1.5;
+    dotsHtml += `<circle cx="${pts[i].x}" cy="${pts[i].y}" r="${r}"><animate attributeName="opacity" values="0.3;1;0.3" dur="${(2+Math.random()*3).toFixed(1)}s" repeatCount="indefinite"/></circle>`;
+  }
+  nodesG.innerHTML = linesHtml;
+  dotsG.innerHTML = dotsHtml;
+})();
+
+/* ================= KINETIC TITLE REVEAL (every section) ================= */
+(function maskReveal(){
+  const targets = document.querySelectorAll('.section-head h2, #flair h2, .contact-info h2');
+  targets.forEach(h => {
+    if (h.dataset.masked) return;
+    h.dataset.masked = '1';
+    const text = h.innerHTML;
+    h.innerHTML = `<span class="mask-wrap"><span class="mask-inner">${text}</span></span>`;
+  });
+  if (gsapReady && !reduceMotion){
+    document.querySelectorAll('.mask-inner').forEach(el => {
+      gsap.from(el, {
+        yPercent:110, duration:1.1, ease:'power4.out',
+        scrollTrigger:{ trigger: el, start:'top 88%' }
+      });
+    });
+  }
+})();
+
+/* ================= HERO CHIPS KEYWORD ROTATION ================= */
+(function rotateHeroChips(){
+  const phrases = ['Agent IA actif', 'Audit de votre entreprise', 'Gains identifiés', 'Processus optimisés', 'Décision recommandée'];
+  const chipEls = [document.getElementById('chip1'), document.getElementById('chip2'), document.getElementById('chip3')];
+  let idx = [0, 1, 2];
+  if (reduceMotion) return;
+  setInterval(() => {
+    chipEls.forEach((chip, i) => {
+      const textEl = chip.querySelector('.fc-text');
+      textEl.style.opacity = '0';
+      setTimeout(() => {
+        idx[i] = (idx[i] + 3) % phrases.length;
+        textEl.textContent = phrases[idx[i]];
+        textEl.style.opacity = '1';
+      }, 300);
+    });
+  }, 3200);
+})();
+
+/* ================= HERO CHIPS PARALLAX ================= */
+if (gsapReady && !reduceMotion && window.innerWidth > 1100){
+  const heroVisual = document.getElementById('heroVisualInner');
+  const chips = document.querySelectorAll('.float-chip');
+  const chipX = Array.from(chips).map((c,i) => gsap.quickTo(c, 'x', {duration:.6, ease:'power3'}));
+  const chipY = Array.from(chips).map((c,i) => gsap.quickTo(c, 'y', {duration:.6, ease:'power3'}));
+  document.getElementById('hero').addEventListener('mousemove', e => {
+    const r = heroVisual.getBoundingClientRect();
+    const px = (e.clientX - r.left - r.width/2) / r.width;
+    const py = (e.clientY - r.top - r.height/2) / r.height;
+    chips.forEach((c,i) => { const depth = (i+1)*10; chipX[i](px*depth); chipY[i](py*depth); });
+  });
+}
+
+/* ================= REFRESH SCROLLTRIGGER AFTER LOAD ================= */
+window.addEventListener('load', () => { if (gsapReady) ScrollTrigger.refresh(); });
+</script>
+</body>
+</html>
