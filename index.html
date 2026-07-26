@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Omnis Conseil — Transformation numérique & IA</title>
+<title>Omnis Conseil : Transformation numérique & IA</title>
 <meta name="description" content="Omnis Conseil accompagne votre transformation numérique et déploie l'intelligence artificielle au service de votre croissance. Découvrez Flair, notre agent IA de prospection B2B.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -362,6 +362,22 @@
   .footer-social a:hover{background:var(--violet);transform:translateY(-3px);}
   .footer-social svg{width:16px;height:16px;}
 
+  /* LEGAL MODALS */
+  .legal-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(10,20,10,.55);backdrop-filter:blur(4px);
+    align-items:center;justify-content:center;padding:24px;}
+  .legal-overlay.open{display:flex;}
+  .legal-modal{display:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    max-width:620px;width:100%;max-height:80vh;overflow-y:auto;padding:38px 34px;position:relative;
+    box-shadow:0 24px 60px var(--shadow-lg);}
+  .legal-modal.open{display:block;}
+  .legal-modal h3{font-family:'Poppins',sans-serif;font-size:22px;margin-bottom:20px;color:var(--ink);}
+  .legal-body p{color:var(--text-dim);font-size:14.5px;line-height:1.7;margin-bottom:16px;}
+  .legal-body strong{color:var(--text);}
+  .legal-body a{color:var(--violet-2);text-decoration:underline;}
+  .legal-close{position:absolute;top:18px;right:18px;background:none;border:none;font-size:26px;line-height:1;
+    color:var(--text-dimmer);cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .2s;}
+  .legal-close:hover{color:var(--text);background:rgba(16,24,17,.06);}
+
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
   }
@@ -410,7 +426,7 @@
   <!-- HERO -->
   <section id="hero" class="wrap">
     <div>
-      <div class="eyebrow"><span class="dot"></span>OMNIS CONSEIL — CONSEIL & INTELLIGENCE ARTIFICIELLE</div>
+      <div class="eyebrow"><span class="dot"></span>OMNIS CONSEIL : CONSEIL & INTELLIGENCE ARTIFICIELLE</div>
       <h1 class="hero-title">
         <div class="word"><span>Nous</span></div>
         <div class="word"><span>&nbsp;transformons</span></div>
@@ -420,7 +436,7 @@
         <br>
         <div class="word"><span class="grad-text">grâce&nbsp;à&nbsp;l'IA.</span></div>
       </h1>
-      <p class="hero-sub">Omnis Conseil accompagne les entreprises dans leur transformation numérique : audit, stratégie et déploiement d'agents IA sur mesure — pour transformer vos données en décisions, et vos process en avantage concurrentiel.</p>
+      <p class="hero-sub">Omnis Conseil accompagne les entreprises dans leur transformation numérique : audit, stratégie et déploiement d'agents IA sur mesure, pour transformer vos données en décisions, et vos process en avantage concurrentiel.</p>
       <div class="hero-ctas">
         <a href="#contact" class="btn btn-primary magnetic">Démarrer un audit IA
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
@@ -611,7 +627,7 @@
         <div class="reveal">
           <div class="flair-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg>Notre produit</div>
           <h2>Flair. L'agent IA qui trouve vos prochains clients.</h2>
-          <p class="flair-lead">Flair scanne le marché en continu, identifie et qualifie vos prospects B2B, puis alimente votre pipeline commercial — automatiquement, jour et nuit. Conçu par Omnis Conseil pour les équipes qui veulent vendre plus, sans prospecter plus.</p>
+          <p class="flair-lead">Flair scanne le marché en continu, identifie et qualifie vos prospects B2B, puis alimente votre pipeline commercial, automatiquement, jour et nuit. Conçu par Omnis Conseil pour les équipes qui veulent vendre plus, sans prospecter plus.</p>
           <div class="flair-features">
             <div class="flair-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Détection de prospects en temps réel</div>
             <div class="flair-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Scoring IA de qualification</div>
@@ -726,7 +742,7 @@
           <g fill="#16834a"><circle cx="150" cy="150" r="7"/><circle cx="60" cy="70" r="4"/><circle cx="240" cy="80" r="4"/><circle cx="250" cy="200" r="4"/><circle cx="70" cy="230" r="4"/><circle cx="150" cy="30" r="4"/></g>
         </svg>
         <div class="section-tag">À propos d'Omnis</div>
-        <p class="about-quote">« Nous croyons que l'IA ne doit pas remplacer vos équipes — elle doit leur redonner le temps de faire ce qu'elles font le mieux. »</p>
+        <p class="about-quote">« Nous croyons que l'IA ne doit pas remplacer vos équipes, elle doit leur redonner le temps de faire ce qu'elles font le mieux. »</p>
         <div class="about-stats">
           <div class="about-stat"><div class="num">360°</div><div class="lbl">Accompagnement, du conseil au déploiement</div></div>
           <div class="about-stat"><div class="num">24/7</div><div class="lbl">Agents IA opérationnels en continu</div></div>
@@ -738,7 +754,7 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Une équipe qui comprend autant vos enjeux métier que la technique IA</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Du conseil en stratégie et développement commercial à la data science, sous un même toit</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Nos propres produits IA, comme Flair, éprouvés avant d'être proposés</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Un accompagnement dans la durée — conduite du changement et formation incluses, pas juste un livrable</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Un accompagnement dans la durée : conduite du changement et formation incluses, pas juste un livrable</li>
         </ul>
       </div>
     </div>
@@ -787,8 +803,8 @@
     </div>
     <div class="footer-col">
       <h4>Légal</h4>
-      <a href="/MentionsLegales">Mentions légales</a>
-      <a href="/PolitiqueConfidentialite">Confidentialité</a>
+      <a href="#" onclick="event.preventDefault(); openLegalModal('mentions-legales');">Mentions légales</a>
+      <a href="#" onclick="event.preventDefault(); openLegalModal('politique-confidentialite');">Confidentialité</a>
       <a href="#contact">Contact</a>
     </div>
   </div>
@@ -800,6 +816,55 @@
     </div>
   </div>
 </footer>
+
+<!-- LEGAL MODALS -->
+<div id="legal-overlay" class="legal-overlay" onclick="if(event.target===this) closeLegalModal();">
+
+  <div id="mentions-legales" class="legal-modal">
+    <button class="legal-close" onclick="closeLegalModal()" aria-label="Fermer">&times;</button>
+    <h3>Mentions légales</h3>
+    <div class="legal-body">
+      <p><strong>Éditeur du site</strong><br>
+      OMNIS CONSEIL, Société par actions simplifiée (SAS) au capital social de 500 €.<br>
+      Siège social : 200 Rue de la Croix Nivert, 75015 Paris, France.<br>
+      SIREN : 102 661 147 — SIRET (siège) : 102 661 147 00011.<br>
+      Numéro de TVA intracommunautaire : FR14102661147.<br>
+      Activité (code NAF/APE) : Conseil pour les affaires et autres conseils de gestion.<br>
+      Contact : <a href="mailto:contact@omnis-conseil.com">contact@omnis-conseil.com</a></p>
+
+      <p><strong>Directeur de la publication</strong><br>
+      Le représentant légal de OMNIS CONSEIL.</p>
+
+      <p><strong>Hébergement</strong><br>
+      Ce site est hébergé par un prestataire d'hébergement web. Les coordonnées complètes de l'hébergeur seront communiquées sur demande à l'adresse ci-dessus.</p>
+
+      <p><strong>Propriété intellectuelle</strong><br>
+      L'ensemble des contenus présents sur ce site (textes, logos, visuels) est la propriété de OMNIS CONSEIL, sauf mention contraire, et ne peut être reproduit sans autorisation préalable.</p>
+    </div>
+  </div>
+
+  <div id="politique-confidentialite" class="legal-modal">
+    <button class="legal-close" onclick="closeLegalModal()" aria-label="Fermer">&times;</button>
+    <h3>Politique de confidentialité</h3>
+    <div class="legal-body">
+      <p><strong>Responsable du traitement</strong><br>
+      OMNIS CONSEIL, 200 Rue de la Croix Nivert, 75015 Paris, France, SIREN 102 661 147.</p>
+
+      <p><strong>Données collectées</strong><br>
+      Via le formulaire de contact, nous collectons uniquement les données que vous nous transmettez volontairement : nom, adresse email, et le contenu de votre message.</p>
+
+      <p><strong>Finalité</strong><br>
+      Ces données sont utilisées exclusivement pour répondre à votre demande et assurer le suivi de la relation commerciale.</p>
+
+      <p><strong>Durée de conservation</strong><br>
+      Vos données sont conservées le temps nécessaire au traitement de votre demande, puis archivées ou supprimées conformément aux obligations légales.</p>
+
+      <p><strong>Vos droits</strong><br>
+      Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition sur vos données personnelles. Pour l'exercer, contactez-nous à <a href="mailto:contact@omnis-conseil.com">contact@omnis-conseil.com</a>.</p>
+    </div>
+  </div>
+
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -1232,6 +1297,24 @@ if (gsapReady && !reduceMotion && window.innerWidth > 1100){
 
 /* ================= REFRESH SCROLLTRIGGER AFTER LOAD ================= */
 window.addEventListener('load', () => { if (gsapReady) ScrollTrigger.refresh(); });
+
+/* ================= LEGAL MODALS ================= */
+function openLegalModal(id){
+  document.querySelectorAll('.legal-modal').forEach(m => m.classList.remove('open'));
+  const modal = document.getElementById(id);
+  const overlay = document.getElementById('legal-overlay');
+  if (modal && overlay){
+    modal.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+function closeLegalModal(){
+  document.getElementById('legal-overlay').classList.remove('open');
+  document.querySelectorAll('.legal-modal').forEach(m => m.classList.remove('open'));
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegalModal(); });
 </script>
 </body>
 </html>
