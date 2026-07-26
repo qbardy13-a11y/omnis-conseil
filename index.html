@@ -89,9 +89,9 @@
   .nav-links{display:flex;align-items:center;gap:6px;}
   .nav-links a{padding:9px 16px;border-radius:999px;font-size:14.5px;font-weight:500;color:var(--text-dim);transition:all .25s var(--ease);position:relative;}
   .nav-links a:hover{color:var(--text);background:rgba(16,24,17,.05);}
-  .nav-flair{display:flex;align-items:center;gap:6px;background:var(--grad-flair)!important;color:#04140b!important;font-weight:700!important;
+  .nav-flair{display:flex;align-items:center;gap:2px;background:var(--grad-flair)!important;color:#04140b!important;font-weight:700!important;font-family:'Poppins',sans-serif!important;
     box-shadow:0 0 0 1px rgba(255,255,255,.15) inset, 0 4px 18px rgba(169,216,110,.25);animation:flairBreathe 3.2s ease-in-out infinite;}
-  .nav-flair svg{width:13px;height:13px;}
+  .nav-flair-dot{color:#04140b;}
   @keyframes flairBreathe{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.15) inset, 0 4px 18px rgba(169,216,110,.25);}50%{box-shadow:0 0 0 1px rgba(255,255,255,.25) inset, 0 4px 28px rgba(22,131,74,.55);}}
   .nav-cta{padding:10px 20px;border-radius:999px;font-weight:600;font-size:14px;background:var(--ink);color:#fff;}
   .nav-right{display:flex;align-items:center;gap:18px;}
@@ -404,10 +404,7 @@
     <a href="#hero" class="logo"><span class="logo-word">omnis conseil<span class="logo-dot">.</span></span></a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#services">Services</a></li>
-      <li><a href="#flair" class="nav-flair">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg>
-        Flair
-      </a></li>
+      <li><a href="flair.html" class="nav-flair">flair<span class="nav-flair-dot">.</span></a></li>
       <li><a href="#process">Processus</a></li>
       <li><a href="#about">À propos</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -632,7 +629,7 @@
             <div class="flair-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Enrichissement automatique des fiches</div>
             <div class="flair-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Intégration à votre CRM</div>
           </div>
-          <a href="https://flair-ai-leads.lovable.app" target="_blank" rel="noopener" class="btn btn-flair magnetic">Essayer Flair
+          <a href="flair.html" class="btn btn-flair magnetic">Essayer Flair
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
           </a>
         </div>
